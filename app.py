@@ -1,30 +1,41 @@
-from flask import Flask, render_template
-import datetime
+'''
+Created on Aug 1, 2022
+Course work: 
+@author: Vedha, Bagiya
+Source:
+
+
+    
+'''
+
+# Import necessary modules
+
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def start():
 
     return render_template('index.html')
 
-@app.route('/ping')
-def ping():
+@app.route('/result', methods = ['GET', "POST"])
+def result():
 
-    result = {
-        "ping"  : "pong"
-    }
-    return result
+    print ('1')
 
-@app.route('/time')
-def time():
-    
-    result = {
-        "current_time"  : datetime.datetime.now().strftime("%H:%M:%S"),
-        "current_date"  : datetime.datetime.now().strftime("%Y-%m-%d")
+    cities = {
+        'chennai': [ "Marina Beach", 'Guindy National Park'],
+        'toronto': [ "Ontario Mall", 'CN Tower']
     }
 
-    return result
+    # if request.method == 'POST':
+
+    city    = request.values.get("city")
+
+    result = cities[city.lower()] 
+
+    return render_template('index.html', result = result)
 
 if __name__== "__main__":
     app.run(host="0.0.0.0", debug = True, port = 5003)
